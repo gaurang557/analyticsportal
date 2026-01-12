@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { Eye, Users, Clock, TrendingUp } from 'lucide-react';
+import { Eye, Users, Clock, TrendingUp, ExternalLink } from 'lucide-react';
 import './index.css';
 
 const PortfolioAnalytics = () => {
@@ -23,7 +23,7 @@ const PortfolioAnalytics = () => {
     try {
       // const response = await fetch('http://localhost:55000/api/analytics');
       const response = await fetch('https://analyticsapi-6qg1.onrender.com/api/analytics');
-      
+      // https://analyticsapi-6qg1.onrender.com/api/analytics
       var data = await response.json();
       console.log(data);
       localStorage.setItem(localstoragekey, JSON.stringify(data));
@@ -36,13 +36,14 @@ const PortfolioAnalytics = () => {
       setPageViews(data.pageViews || generateMockData());
       setLoading(false);
     } catch (error) {
-      data = localStorage.getItem(localstoragekey);
-      setStats(data || {
+      // data = localStorage.getItem(localstoragekey);
+      data = {
         totalViews: 124,
         totalUsers:  89,
         avgDuration: 14,
         sessions:  108
-      });
+      };
+      setStats(data);
       setPageViews(data.pageViews || generateMockData());
       setLoading(false);
       console.error('Error:', error);
@@ -73,7 +74,7 @@ const PortfolioAnalytics = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen min-w-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading analytics...</p>
@@ -83,66 +84,98 @@ const PortfolioAnalytics = () => {
   }
 
   return (
-    <div className="flex justify-center min-h-screen min-w-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Portfolio Analytics</h1>
-          <p className="text-gray-600 mt-2">Track your website performance</p>
-        </div>
+    // <div className="flex justify-center min-h-screen">
+      <div className="topdiv justify-center">
+        <div className="flex mb-8 items-center">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Portfolio Analytics
+          </h1>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            icon={Eye}
-            label="Total Page Views"
-            value={stats.totalViews}
-            color="bg-blue-500"
-          />
-          <StatCard
-            icon={Users}
-            label="Total Users"
-            value={stats.totalUsers}
-            color="bg-green-500"
-          />
-          <StatCard
-            icon={Clock}
-            label="Avg. Duration (sec)"
-            value={stats.avgDuration}
-            color="bg-purple-500"
-          />
-          <StatCard
-            icon={TrendingUp}
-            label="Sessions"
-            value={stats.sessions}
-            color="bg-orange-500"
-          />
-        </div>
+          <div className="flex items-center">
+            <a
+            href='https://gaurang557.github.io/portfolio/'
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-blue-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
 
-        {/* Chart */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Weekly Page Views</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={pageViews}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="views" fill="#3b82f6" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+            <ExternalLink size={40} color="#5db5eb" />
+            <span className="items-center access-portfolio">Access the portfolio</span>
+            </a>
+          </div>
         </div>
+        <div className='statnchart'>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <StatCard
+              icon={Eye}
+              label="Total Page Views"
+              value={stats.totalViews}
+              color="bg-blue-500"
+            />
+            <StatCard
+              icon={Users}
+              label="Total Users"
+              value={stats.totalUsers}
+              color="bg-green-500"
+            />
+            <StatCard
+              icon={Clock}
+              label="Avg. Duration (sec)"
+              value={stats.avgDuration}
+              color="bg-purple-500"
+            />
+            <StatCard
+              icon={TrendingUp}
+              label="Sessions"
+              value={stats.sessions}
+              color="bg-orange-500"
+            />
+          </div>
 
+          {/* Chart */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Weekly Page Views</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={pageViews}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="views" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        
         {/* Backend API Note */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg apinote">
           <h3 className="font-semibold text-blue-900 mb-2">📌 Backend Information</h3>
           <p className="text-blue-800 text-sm">
             This dashboard fetches data from .NET API endpoint running at &nbsp;
-            <code className="bg-blue-100 px-2 py-1 rounded">https://analyticsapi-6qg1.onrender.com</code>,
-            the .NET api in turn fetches data from Google Analytics Data API.
+            <a
+              href="https://analyticsapi-6qg1.onrender.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <code className="bg-blue-100 px-2 py-1 rounded">
+                https://analyticsapi-6qg1.onrender.com
+              </code>
+            </a>,
+            the .NET api in turn fetches data from Google Analytics Data API. The swagger of the api can be accessed 
+            at <a
+              href="https://analyticsapi-6qg1.onrender.com/swagger"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <code className="bg-blue-100 px-2 py-1 rounded">
+                https://analyticsapi-6qg1.onrender.com/swagger
+              </code>
+            </a>
           </p>
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 
