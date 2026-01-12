@@ -1,19 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { Eye, Users, Clock, TrendingUp, ExternalLink } from 'lucide-react';
+import { Eye, Users, Clock, TrendingUp, ExternalLink, Github } from 'lucide-react';
 import './index.css';
 
 const PortfolioAnalytics = () => {
   const [stats, setStats] = useState({
-    totalViews: 0,
-    totalUsers: 0,
-    avgDuration: 0,
-    pageViews: 0
+    totalViews: 25,
+    totalUsers: 5,
+    sessions: 16,
+    avgDuration: 108,
+    pageViews: 16
   });
+  const [apihits, setApihits] = useState([
+  {
+    "date": "2026-01-12",
+    "hitCount": 22
+  }
+]);
   
-  const [pageViews, setPageViews] = useState([]);
+  const [pageViews, setPageViews] = useState([
+    {
+      "day": "Thu",
+      "views": 12,
+      "date": "2026-01-08"
+    },
+    {
+      "day": "Fri",
+      "views": 5,
+      "date": "2026-01-09"
+    },
+    {
+      "day": "Sat",
+      "views": 3,
+      "date": "2026-01-10"
+    }
+  ]);
   const [loading, setLoading] = useState(true);
-  const localstoragekey = 'portfolio-analytics-data';
   useEffect(() => {
     // Fetch analytics data from your backend API
     fetchAnalyticsData();
@@ -26,36 +48,13 @@ const PortfolioAnalytics = () => {
       // https://analyticsapi-6qg1.onrender.com/api/analytics
       var data = await response.json();
       console.log(data);
-      localStorage.setItem(localstoragekey, JSON.stringify(data));
-      setStats(data || {
-        totalViews: data.totalViews || 124,
-        totalUsers: data.totalUsers || 89,
-        avgDuration: data.avgDuration || 14,
-        sessions: data.sessions || 108
-      });
-      setPageViews(data.pageViews || generateMockData());
+      setStats(data || stats);
+      setApihits(data.apihitcount || apihits);
+      setPageViews(data.pageViews || pageViews);
       setLoading(false);
     } catch (error) {
-      // data = localStorage.getItem(localstoragekey);
-      data = {
-        totalViews: 124,
-        totalUsers:  89,
-        avgDuration: 14,
-        sessions:  108
-      };
-      setStats(data);
-      setPageViews(data.pageViews || generateMockData());
-      setLoading(false);
       console.error('Error:', error);
     }
-  };
-
-  const generateMockData = () => {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return days.map(day => ({
-      day,
-      views: Math.floor(Math.random() * 200) + 50
-    }));
   };
 
   const StatCard = ({ icon: Icon, label, value, color }) => (
@@ -72,16 +71,16 @@ const PortfolioAnalytics = () => {
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="min-h-screen min-w-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading analytics...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen min-w-screen bg-gray-50 flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+  //         <p className="mt-4 text-gray-600">Loading analytics...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     // <div className="flex justify-center min-h-screen">
@@ -104,9 +103,22 @@ const PortfolioAnalytics = () => {
             </a>
           </div>
         </div>
-        <div className='statnchart'>
+        {loading && (
+          <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+            <p className="font-medium">
+              Showing previously loaded data
+            </p>
+            <p className="text-blue-700">
+              We’re fetching the latest analytics in the background.  
+              The API server may take up to <span className="font-semibold">~50 seconds</span> to respond after inactivity.
+            </p>
+          </div>
+        )}
+        <div className="statnchartcontainer">
+        {/* Left Section */}
+        <div className="statnchart">
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatCard
               icon={Eye}
               label="Total Page Views"
@@ -133,9 +145,9 @@ const PortfolioAnalytics = () => {
             />
           </div>
 
-          {/* Chart */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Weekly Page Views</h2>
+          {/* Weekly Page Views */}
+          <div className="chart-card">
+            <h2 className="chart-title">Weekly Page Views</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={pageViews}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -147,6 +159,41 @@ const PortfolioAnalytics = () => {
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* Right Section */}
+        <div className="statnchart">
+          <div className="chart-card">
+
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="chart-title">Weekly API Hits</h2>
+              <a
+              href='https://github.com/gaurang557/analyticsapi' target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              >
+              <Github size={40} color="#070202" />
+              <span className="items-center access-portfolio" style={{color: "black"}}>GitHub Repo</span>
+              </a>
+              <a
+              href='https://analyticsapi-6qg1.onrender.com/swagger/index.html' target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+              >
+              <ExternalLink size={40} color="#5db5eb" />
+              <span className="items-center access-portfolio" style={{color: "black"}}>Access the .NET API</span>
+              </a>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={apihits}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="hitCount" fill="#10b981" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
         
         {/* Backend API Note */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg apinote">
@@ -164,12 +211,12 @@ const PortfolioAnalytics = () => {
             </a>,
             the .NET api in turn fetches data from Google Analytics Data API. The swagger of the api can be accessed 
             at <a
-              href="https://analyticsapi-6qg1.onrender.com/swagger"
+              href="https://analyticsapi-6qg1.onrender.com"
               target="_blank"
               rel="noopener noreferrer"
             >
               <code className="bg-blue-100 px-2 py-1 rounded">
-                https://analyticsapi-6qg1.onrender.com/swagger
+                https://analyticsapi-6qg1.onrender.com
               </code>
             </a>
           </p>
