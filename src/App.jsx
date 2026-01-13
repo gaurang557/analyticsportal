@@ -37,6 +37,9 @@ const PortfolioAnalytics = () => {
   ]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setApihits(JSON.parse(localStorage.getItem('apihits')) || apihits);
+    setPageViews(JSON.parse(localStorage.getItem('pageViews')) || pageViews);
+    setStats(JSON.parse(localStorage.getItem('stats')) || stats);
     // Fetch analytics data from your backend API
     fetchAnalyticsData();
   }, []);
@@ -49,8 +52,11 @@ const PortfolioAnalytics = () => {
       var data = await response.json();
       console.log(data);
       setStats(data || stats);
+      localStorage.setItem('stats', JSON.stringify(data));
       setApihits(data.apihitcount || apihits);
+      localStorage.setItem('apihits', JSON.stringify(data.apihitcount));
       setPageViews(data.pageViews || pageViews);
+      localStorage.setItem('pageViews', JSON.stringify(data.pageViews));
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
