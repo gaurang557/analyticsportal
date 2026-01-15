@@ -46,17 +46,17 @@ const PortfolioAnalytics = () => {
 
   const fetchAnalyticsData = async () => {
     try {
-      // const response = await fetch('http://localhost:55000/api/analytics');
+      // const response = await fetch('http://localhost:5000/api/analytics');
       const response = await fetch('https://analyticsapi-6qg1.onrender.com/api/analytics');
-      // https://analyticsapi-6qg1.onrender.com/api/analytics
       var data = await response.json();
-      console.log(data);
+      var apihits = JSON.parse(data.apihitcount) || [];
+      var apihitcount = apihits.map(obj => ({"date": obj.Item1, "hitCount": obj.Item2}));
       setStats(data || stats);
       localStorage.setItem('stats', JSON.stringify(data));
-      setApihits(data.apihitcount || apihits);
-      localStorage.setItem('apihits', JSON.stringify(data.apihitcount));
-      setPageViews(data.pageViews || pageViews);
-      localStorage.setItem('pageViews', JSON.stringify(data.pageViews));
+      setApihits(apihitcount || apihits);
+      localStorage.setItem('apihits', JSON.stringify(apihitcount));
+      setPageViews(data.pageViews.slice(-7) || pageViews);
+      localStorage.setItem('pageViews', JSON.stringify(pageViews));
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -77,16 +77,6 @@ const PortfolioAnalytics = () => {
     </div>
   );
 
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen min-w-screen bg-gray-50 flex items-center justify-center">
-  //       <div className="text-center">
-  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-  //         <p className="mt-4 text-gray-600">Loading analytics...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     // <div className="flex justify-center min-h-screen">
@@ -171,7 +161,7 @@ const PortfolioAnalytics = () => {
           <div className="chart-card">
 
             <div className="flex items-center justify-between mb-4">
-              <h2 className="chart-title">Weekly API Hits</h2>
+              <h3 className="chart-title">Weekly count of number of Hits to google analytics api</h3>
               <a
               href='https://github.com/gaurang557/analyticsapi' target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"

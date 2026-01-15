@@ -2,17 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  /* Font settings */
+  font-family: system-ui, -apple-system, "Segoe UI", Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
+  line-height: 1.6; /* slightly more readable spacing */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Color scheme */
+  color-scheme: light blue;
+  color: rgba(255, 255, 255, 0.9); /* slightly higher contrast */
+  background-color: #1e1e1e; /* softer dark background */
+
+  /* Font rendering & text optimization */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Optional: smooth transitions for colors */
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 .topdiv{
   max-width: 90%;
