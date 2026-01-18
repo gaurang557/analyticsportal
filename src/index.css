@@ -69,6 +69,11 @@
 .apinote{
   width: 100%;
 }
+.login-button{
+  width: 100px;
+  background-color: rgb(229, 43, 243);
+  color: white;
+}
 
 a {
   font-weight: 500;
