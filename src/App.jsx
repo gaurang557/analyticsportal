@@ -120,7 +120,7 @@ const PortfolioAnalytics = () => {
           Log In
         </button>
       ) : (
-        <button className='login-button' onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+        <button className='login-button' onClick={() => logout({ logoutParams: { returnTo: window.location.origin + "/analyticsportal" } })}>
           Log Out
         </button>
       )}
