@@ -152,7 +152,7 @@ const PortfolioAnalytics = () => {
             Showing dummy or previously loaded data till real data is loaded or till you are authenticated...
           </p>
           <p className="font-medium">
-            This message will disappear once real data is loaded or you are authenticated.
+            This message will disappear once real data is loaded and you are authenticated.
           </p>
           <p className="text-blue-700">
             We’re fetching the latest analytics in the background.  
