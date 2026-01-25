@@ -149,7 +149,10 @@ const PortfolioAnalytics = () => {
       {loading && (
         <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
           <p className="font-medium">
-            Showing dummy data till real data is loaded or till you are authenticated...
+            Showing dummy or previously loaded data till real data is loaded or till you are authenticated...
+          </p>
+          <p className="font-medium">
+            This message will disappear once real data is loaded or you are authenticated.
           </p>
           <p className="text-blue-700">
             We’re fetching the latest analytics in the background.  
