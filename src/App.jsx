@@ -3,6 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Eye, Users, Clock, TrendingUp, ExternalLink, Github, LogIn } from 'lucide-react';
 import './index.css';
+import './App.css';
 
 const PortfolioAnalytics = () => {
   const { loginWithRedirect, logout, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
@@ -114,7 +115,7 @@ const PortfolioAnalytics = () => {
 
   return (
     <div className="topdiv justify-center">
-      <nav className='flex justify-end mb-4'>
+      <div className='flex justify-end mb-4 navbar'>
         {!isAuthenticated ? (
         <button className='login-button' onClick={() => loginWithRedirect()}>
           Log In
@@ -124,7 +125,9 @@ const PortfolioAnalytics = () => {
           Log Out
         </button>
       )}
-      </nav>
+      </div>
+      <div className=' navbar'>
+      </div>
       <div className="flex mb-8 items-center">
         <h1 className="text-3xl font-bold text-gray-800">
           Portfolio Analytics
@@ -139,7 +142,7 @@ const PortfolioAnalytics = () => {
           >
 
           <ExternalLink size={40} color="#5db5eb" />
-          <span className="items-center access-portfolio">Access the portfolio</span>
+          <span className="items-center access-portfolio text-gray-100">Access the portfolio</span>
           </a>
         </div>
       </div>

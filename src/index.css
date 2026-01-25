@@ -1,29 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  /* width: 100%; */
+  /* height: 100vh; */
+}
+#root {
   /* Font settings */
+  /* height: 100vh; */
+  width: 100%;
   font-family: system-ui, -apple-system, "Segoe UI", Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
-  line-height: 1.6; /* slightly more readable spacing */
+  line-height: 1.6;
+    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   /* Color scheme */
-  color-scheme: light blue;
-  color: rgba(255, 255, 255, 0.9); /* slightly higher contrast */
-  background-color: #1e1e1e; /* softer dark background */
-
-  /* Font rendering & text optimization */
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* color-scheme: light blue; */
+  color: #213547;
+  background-color: #FFFFFF; /* softer dark background */
 
   /* Optional: smooth transitions for colors */
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 .topdiv{
-  max-width: 90%;
+  width: 90%;
+  height: 100%;
   margin: auto;
+  padding-top: 2rem;
+  flex: 1;
+}
+.navbar{
+  background-color: #FFFFFF;
+  height: 100px;
+  /* height: 30%; */
 }
 .statnchartcontainer {
   display: flex;
@@ -62,16 +80,12 @@
   color: #1f2937;
   margin-bottom: 1rem;
 }
-
-.access-portfolio{
-  color: #ebebee;
-}
 .apinote{
   width: 100%;
 }
 .login-button{
   width: 100px;
-  background-color: rgb(229, 43, 243);
+  background-color: #2563EB;
   color: white;
 }
 
