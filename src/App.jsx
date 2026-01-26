@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Eye, Users, Clock, TrendingUp, ExternalLink, Github, LogIn } from 'lucide-react';
-import './index.css';
-import './App.css';
 
 const PortfolioAnalytics = () => {
   const { loginWithRedirect, logout, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
@@ -14,6 +12,12 @@ const PortfolioAnalytics = () => {
     avgDuration: 108,
     pageViews: 16
   });
+  const [requestStats, setRequestStats] = useState({
+    sent: 0,
+    success: 0,
+    failed: 0,
+  });
+  const [token, setToken] = useState(null);
   const [apihits, setApihits] = useState([
   {
     "date": "2026-01-12",
@@ -49,7 +53,6 @@ const PortfolioAnalytics = () => {
     pingBackend();
   }, []);
 
-  useEffect(() => {
   const fetchAnalytics = async () => {
     if (isAuthenticated) {
       try {
@@ -58,7 +61,8 @@ const PortfolioAnalytics = () => {
         setStats(JSON.parse(localStorage.getItem('stats')) || stats);
 
         // Fetch data
-        const token = await getAccessTokenSilently();
+        const t = await getAccessTokenSilently();
+        setToken(t);
         const response = await fetch(`${url}/api/analytics`, {
           method: 'GET',
           headers: {
@@ -94,7 +98,53 @@ const PortfolioAnalytics = () => {
       }
     }
   };
+  const refreshAnalytics = async () => {
+  setRequestStats(prev => ({ ...prev, sent: prev.sent + 1 }));
 
+  try {
+    if (!isAuthenticated) throw new Error("Not authenticated");
+
+    setLoading(true);
+
+    // reuse already cached token (Auth0 caches silently)
+
+    const response = await fetch(`${url}/api/analytics`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("API failed");
+
+    const data = await response.json();
+
+    const apihitsData = JSON.parse(data.apihitcount || "[]");
+    const apihitcount = apihitsData.map(obj => ({
+      date: obj.Item1,
+      hitCount: obj.Item2,
+    }));
+
+    setStats(data);
+    setApihits(apihitcount);
+    setPageViews(data.pageViews?.slice(-7) || []);
+
+    localStorage.setItem("stats", JSON.stringify(data));
+    localStorage.setItem("apihits", JSON.stringify(apihitcount));
+    localStorage.setItem("pageViews", JSON.stringify(data.pageViews || []));
+
+    setRequestStats(prev => ({ ...prev, success: prev.success + 1 }));
+  } 
+  catch (err) {
+    console.error("Refresh failed:", err);
+    setRequestStats(prev => ({ ...prev, failed: prev.failed + 1 }));
+  } 
+  finally {
+    setLoading(false);
+  }
+};
+
+  useEffect(() => {
   fetchAnalytics();
 }, [isAuthenticated]);
 
@@ -126,8 +176,6 @@ const PortfolioAnalytics = () => {
         </button>
       )}
       </div>
-      <div className=' navbar'>
-      </div>
       <div className="flex mb-8 items-center">
         <h1 className="text-3xl font-bold text-gray-800">
           Portfolio Analytics
@@ -140,14 +188,35 @@ const PortfolioAnalytics = () => {
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-blue-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-
           <ExternalLink size={40} color="#5db5eb" />
           <span className="items-center access-portfolio text-gray-100">Access the portfolio</span>
           </a>
         </div>
       </div>
+      {/* Refresh & Request Metrics */}
+<div className="req-topdiv">
+  <button
+    onClick={refreshAnalytics}
+    disabled={!isAuthenticated || loading}
+    className="flex hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 refresh-button"
+  >
+    🔄 Refresh Data
+  </button>
+  <div>
+    Requests Sent: {requestStats.sent}
+  </div>
+  <div>
+    Success: {requestStats.success}
+  </div>
+  <div>
+    Failed: {requestStats.failed}
+  </div>
+
+</div>
+
+
       {loading && (
-        <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+        <div className="mb-4 rounded-lg border border-blue-50 bg-blue-50 px-4 py-3 text-sm ">
           <p className="font-medium">
             Showing dummy or previously loaded data till real data is loaded or till you are authenticated...
           </p>
