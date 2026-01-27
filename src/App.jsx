@@ -67,12 +67,11 @@ const PortfolioAnalytics = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${t}`,
           }
         });
 
         const data = await response.json();
-        
         // Parse and transform API hits
         const apihitsData = JSON.parse(data.apihitcount) || [];
         const apihitcount = apihitsData.map(obj => ({
@@ -106,8 +105,6 @@ const PortfolioAnalytics = () => {
 
     setLoading(true);
 
-    // reuse already cached token (Auth0 caches silently)
-
     const response = await fetch(`${url}/api/analytics`, {
       method: "GET",
       headers: {
@@ -116,9 +113,7 @@ const PortfolioAnalytics = () => {
     });
 
     if (!response.ok) throw new Error("API failed");
-
     const data = await response.json();
-
     const apihitsData = JSON.parse(data.apihitcount || "[]");
     const apihitcount = apihitsData.map(obj => ({
       date: obj.Item1,
@@ -197,7 +192,8 @@ const PortfolioAnalytics = () => {
 <div className="req-topdiv">
   <button
     onClick={refreshAnalytics}
-    disabled={!isAuthenticated || loading}
+    // disabled={!isAuthenticated || loading}
+    disabled={!isAuthenticated}
     className="flex hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 refresh-button"
   >
     🔄 Refresh Data
