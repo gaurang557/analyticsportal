@@ -143,19 +143,21 @@ const PortfolioAnalytics = () => {
   fetchAnalytics();
 }, [isAuthenticated]);
 
-  const StatCard = ({ icon: Icon, label, value, color }) => (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-gray-500 text-sm font-medium">{label}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">{value.toLocaleString()}</p>
-        </div>
-        <div className={`${color} p-3 rounded-full`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
+  const StatCard = ({ icon: Icon, label, value = 0, color }) => (
+  <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-gray-500 text-sm font-medium">{label}</p>
+        <p className="text-3xl font-bold text-gray-800 mt-2">
+          {Number(value).toLocaleString()}
+        </p>
+      </div>
+      <div className={`${color} p-3 rounded-full`}>
+        <Icon className="w-6 h-6 text-white" />
       </div>
     </div>
-  );
+  </div>
+);
 
 
   return (
