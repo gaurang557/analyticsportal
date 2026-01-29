@@ -207,11 +207,15 @@ const PortfolioAnalytics = () => {
     Success: {requestStats.success}
   </div>
   <div>
-    Failed: {requestStats.failed}
+    Excess requests: {requestStats.failed}
   </div>
 
 </div>
-
+      <div className="mb-4 rounded-lg border border-blue-50 bg-blue-50 px-4 py-3 text-sm ">
+          <p className="font-medium">
+            The backend api rate limits the number of requests to 3 request per minute.
+          </p>
+        </div>
 
       {loading && (
         <div className="mb-4 rounded-lg border border-blue-50 bg-blue-50 px-4 py-3 text-sm ">
