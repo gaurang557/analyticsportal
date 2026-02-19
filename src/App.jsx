@@ -213,14 +213,14 @@ const PortfolioAnalytics = () => {
   </div>
 
 </div>
-      <div className="mb-4 rounded-lg border border-blue-50 bg-blue-50 px-4 py-3 text-sm ">
+      <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
           <p className="font-medium">
-            The backend api rate limits the number of requests to 3 request per minute.
+            The backend api rate limits the number of requests to 10 request per minute.
           </p>
         </div>
 
       {loading && (
-        <div className="mb-4 rounded-lg border border-blue-50 bg-blue-50 px-4 py-3 text-sm ">
+        <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
           <p className="font-medium">
             Showing dummy or previously loaded data till real data is loaded or till you are authenticated...
           </p>
@@ -228,8 +228,7 @@ const PortfolioAnalytics = () => {
             This message will disappear once real data is loaded and you are authenticated.
           </p>
           <p className="text-blue-700">
-            We’re fetching the latest analytics in the background.  
-            The API server may take up to <span className="font-semibold">~50 seconds</span> to respond after inactivity.
+            fetching ...
           </p>
         </div>
       )}
