@@ -177,7 +177,7 @@ const PortfolioAnalytics = () => {
       </div>
       <div className="flex mb-8 items-center">
         <h1 className="text-3xl font-bold text-gray-800">
-          Portfolio Analytics
+          Website Analytics
         </h1>
 
         <div className="flex items-center">
@@ -188,7 +188,7 @@ const PortfolioAnalytics = () => {
           className="flex items-center gap-2 bg-blue-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
           <ExternalLink size={40} color="#5db5eb" />
-          <span className="items-center access-portfolio text-gray-100">Access the portfolio</span>
+          <span className="items-center access-portfolio text-gray-100">Access the Website</span>
           </a>
         </div>
       </div>
