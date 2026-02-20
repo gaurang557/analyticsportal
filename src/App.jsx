@@ -218,15 +218,13 @@ const PortfolioAnalytics = () => {
             The backend api rate limits the number of requests to 10 request per minute.
           </p>
         </div>
-
+      {!isAuthenticated && (
+        <p className="font-medium">
+            Kindly login to see the real data.
+          </p>
+      )}
       {loading && (
         <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
-          <p className="font-medium">
-            Showing dummy or previously loaded data till real data is loaded or till you are authenticated...
-          </p>
-          <p className="font-medium">
-            This message will disappear once real data is loaded and you are authenticated.
-          </p>
           <p className="text-blue-700">
             fetching ...
           </p>
