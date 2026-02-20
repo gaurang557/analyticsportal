@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { Eye, Users, Clock, TrendingUp, ExternalLink, Github, LogIn, View } from 'lucide-react';
-import Backend from './components/Backend';
-import Apichart from './components/apichart';
-import Viewchart from './components/Viewchart';
+import Backend from './components/Backend.jsx';
+import Apichart from './components/Apichart.jsx';
+import Viewchart from './components/Viewchart.jsx';
 const PortfolioAnalytics = () => {
   const { loginWithRedirect, logout, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [stats, setStats] = useState({
