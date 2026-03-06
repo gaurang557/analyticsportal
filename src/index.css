@@ -4,11 +4,13 @@
 *,
 *::before,
 *::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 body {
   margin: 0;
-  background-color: #ffffff;
+  background-color: #151414;
 }
 #root {
   /* Font settings */
@@ -23,40 +25,63 @@ body {
   /* Optional: smooth transitions for colors */
   transition: color 0.2s ease, background-color 0.2s ease;
 }
-.topdiv{
-  width: 90%;
-  height: 100%;
-  margin: auto;
-  padding-top: 2rem;
-  flex: 1;
-}
 .navbar{
-  height: 30%;
-}
-.statnchartcontainer {
   display: flex;
-  gap: 2rem;
-  width: 100%;
-  padding: 1.5rem;
-  align-items: stretch;
-}
-.req-topdiv{
-  display: flex;
-  margin: 1.5rem 0 2rem 0;
+  height: 100px;
+  background: #232323;
   align-items: center;
-  height: 50px;
   justify-content: space-around;
-  border: #1f2937 solid 1px;   border-radius: 10px;
+}
+.heading{
+  font-size: 2.5rem;
+  font-weight: 700;
   color: #ffffff;
-  background-color: #2563EB;
+}
+.visitwebsitelink{
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.visitwebsitelink:hover{
+  color: #7b98f6;
+}
+.requestpanel{
+  display: flex;
+  align-items: center;
+  height: 100px;
+  justify-content: space-around;
+  border: #091321 solid 10px;   border-radius: 10px;
+  color: #020000;
+  background: #fff;
 }
 .refresh-button{
-  background-color: #ffffff;
-  /* color: white; */
+  background: #000;
+  color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.InfoPanel{
+  color: white;
+}
+.statnchart {
+  display: grid;
+  margin: 2rem 0;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.5rem;
+}
+.statcard{
+  color: white;
+  margin: 0 4rem;
+  align-content: center;
+}
+.backendapichart{
+
+  color: #000;
+  margin: 2rem 4rem;
+  border-radius: 10px;
+  padding: 1rem;
 }
 /* Responsive behavior */
 @media (max-width: 1024px) {
@@ -64,35 +89,24 @@ body {
     flex-direction: column;
   }
 }
-
-.statnchart {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Chart Card Styling */
-.chart-card {
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
 /* Title consistency */
 .chart-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #fff;
   margin-bottom: 1rem;
 }
 .apinote{
   width: 100%;
 }
 .login-button{
-  width: 100px;
-  background-color: #2563EB;
+  width: 150px;
+  background: linear-gradient(45deg, #6c6c6d, #151414);
   color: white;
+  height: 50px;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 1rem;
 }
 
 a {

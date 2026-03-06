@@ -46,7 +46,7 @@ const PortfolioAnalytics = () => {
       "date": "2026-01-10"
     }
   ]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function pingBackend() {
       const isHealthy = await fetch(`${url}/api/health`) ? true : false;
@@ -58,11 +58,8 @@ const PortfolioAnalytics = () => {
   const fetchAnalytics = async () => {
     if (isAuthenticated) {
       try {
-        setApihits(JSON.parse(localStorage.getItem('apihits')) || apihits);
-        setPageViews(JSON.parse(localStorage.getItem('pageViews')) || pageViews);
-        setStats(JSON.parse(localStorage.getItem('stats')) || stats);
-
         // Fetch data
+        setLoading(true);
         const t = await getAccessTokenSilently();
         setToken(t);
         const response = await fetch(`${url}/api/analytics`, {
@@ -81,6 +78,7 @@ const PortfolioAnalytics = () => {
           "hitCount": obj.Item2
         }));
 
+        setLoading(false);
         // Update state and localStorage
         setStats(data);
         localStorage.setItem('stats', JSON.stringify(data));
@@ -91,8 +89,6 @@ const PortfolioAnalytics = () => {
         const recentPageViews = data.pageViews?.slice(-7) || pageViews;
         setPageViews(recentPageViews);
         localStorage.setItem('pageViews', JSON.stringify(recentPageViews));
-        
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching analytics:', error);
         setLoading(false);
@@ -104,9 +100,7 @@ const PortfolioAnalytics = () => {
 
   try {
     if (!isAuthenticated) throw new Error("Not authenticated");
-
     setLoading(true);
-
     const response = await fetch(`${url}/api/analytics`, {
       method: "GET",
       headers: {
@@ -121,7 +115,7 @@ const PortfolioAnalytics = () => {
       date: obj.Item1,
       hitCount: obj.Item2,
     }));
-
+    setLoading(false);
     setStats(data);
     setApihits(apihitcount);
     setPageViews(data.pageViews?.slice(-7) || []);
@@ -163,11 +157,26 @@ const PortfolioAnalytics = () => {
 
 
   return (
-    <div className="topdiv justify-center">
-      <div className='flex justify-end mb-4 navbar'>
+    <div>
+      <div className='navbar'>
+        <h1 className="heading">
+          Website Analytics
+        </h1>
+
+        <div>
+          <a
+          href='https://gaurang557.github.io/portfolio/'
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="visitwebsitelink"
+          >
+          <span>Visit the website</span>
+          </a>
+        </div>
+
         {!isAuthenticated ? (
         <button className='login-button' onClick={() => loginWithRedirect()}>
-          Log In
+          Log In / Sign Up
         </button>
       ) : (
         <button className='login-button' onClick={() => logout({ logoutParams: { returnTo: window.location.origin + "/analyticsportal" } })}>
@@ -176,65 +185,51 @@ const PortfolioAnalytics = () => {
       )}
       </div>
       <div className="flex mb-8 items-center">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Website Analytics
-        </h1>
+        
+      </div>
 
-        <div className="flex items-center">
-          <a
-          href='https://gaurang557.github.io/portfolio/'
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 bg-blue-600 text-gray-100 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-          <ExternalLink size={40} color="#5db5eb" />
-          <span className="items-center access-portfolio text-gray-100">Access the Website</span>
-          </a>
+      {/* Refresh & Request Metrics */}
+      <div className="requestpanel">
+        <button
+          onClick={refreshAnalytics}
+          // disabled={!isAuthenticated || loading}
+          disabled={!isAuthenticated}
+          className="flex refresh-button"
+        >
+          Refresh analytics
+        </button>
+        <div>
+          Requests Sent: {requestStats.sent}
+        </div>
+        <div>
+          Success: {requestStats.success}
+        </div>
+        <div>
+          Excess requests: {requestStats.failed}
         </div>
       </div>
-      {/* Refresh & Request Metrics */}
-<div className="req-topdiv">
-  <button
-    onClick={refreshAnalytics}
-    // disabled={!isAuthenticated || loading}
-    disabled={!isAuthenticated}
-    className="flex hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 refresh-button"
-  >
-    🔄 Refresh Data
-  </button>
-  <div>
-    Requests Sent: {requestStats.sent}
-  </div>
-  <div>
-    Success: {requestStats.success}
-  </div>
-  <div>
-    Excess requests: {requestStats.failed}
-  </div>
 
-</div>
-      <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
+      <div className="InfoPanel">
           <p className="font-medium">
             The backend api rate limits the number of requests to 10 request per minute.
           </p>
-        </div>
-      {!isAuthenticated && (
-        <p className="font-medium">
-            Kindly login to see the real data.
-          </p>
-      )}
-      {loading && (
-        <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
-          <p className="text-blue-700">
-            fetching ...
-          </p>
-        </div>
-      )}
-      <div className="statnchartcontainer">
-      {/* Left Section */}
+          {!isAuthenticated && (
+            <p className="font-medium">
+                Kindly login to see the real data.
+            </p>
+          )}
+          {loading && (
+            <div className="mb-4 rounded-lg bg-blue-50 px-4 py-3 text-sm ">
+              <p className="text-blue-700">
+                fetching ...
+              </p>
+            </div>
+          )}
+      </div>
+      
       <div className="statnchart">
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="statcard">
           <StatCard
             icon={Eye}
             label="Total Page Views"
@@ -267,9 +262,8 @@ const PortfolioAnalytics = () => {
 
       {/* Right Section */}
       <Apichart apihits={apihits} />
-    </div>
     {/* Backend API Note */}
-    <Backend />
+    {/* <Backend /> */}
     </div>
   );
 };
