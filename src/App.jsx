@@ -31,19 +31,19 @@ const PortfolioAnalytics = () => {
   const url = "https://analyticsapi-6qg1.onrender.com";
   const [pageViews, setPageViews] = useState([
     {
-      "day": "Thu",
-      "views": 12,
-      "date": "2026-01-08"
+      "Day": "Thu",
+      "Views": 12,
+      "Date": "2026-01-08"
     },
     {
-      "day": "Fri",
-      "views": 5,
-      "date": "2026-01-09"
+      "Day": "Fri",
+      "Views": 5,
+      "Date": "2026-01-09"
     },
     {
-      "day": "Sat",
-      "views": 3,
-      "date": "2026-01-10"
+      "Day": "Sat",
+      "Views": 3,
+      "Date": "2026-01-10"
     }
   ]);
   const [loading, setLoading] = useState(false);
@@ -110,6 +110,7 @@ const PortfolioAnalytics = () => {
 
     if (!response.ok) throw new Error("API failed");
     const data = await response.json();
+    console.log("Fetched data:", data);
     const apihitsData = JSON.parse(data.apihitcount || "[]");
     const apihitcount = apihitsData.map(obj => ({
       date: obj.Item1,
