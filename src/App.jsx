@@ -79,6 +79,7 @@ const PortfolioAnalytics = () => {
     }));
 
     setStats(data);
+    setLoading(false);
     setApihits(apihitcount);
     setPageViews(data.pageViews?.slice(-7) || []);
 
