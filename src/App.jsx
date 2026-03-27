@@ -74,21 +74,19 @@ const PortfolioAnalytics = () => {
         // Parse and transform API hits
         const apihitsData = JSON.parse(data.apihitcount) || [];
         const apihitcount = apihitsData.map(obj => ({
-          "date": obj.Item1, 
-          "hitCount": obj.Item2
-        }));
+      date: obj.Item1,
+      hitCount: obj.Item2,
+    }));
 
-        setLoading(false);
-        // Update state and localStorage
-        setStats(data);
-        localStorage.setItem('stats', JSON.stringify(data));
-        
-        setApihits(apihitcount);
-        localStorage.setItem('apihits', JSON.stringify(apihitcount));
-        
-        const recentPageViews = data.pageViews?.slice(-7) || pageViews;
-        setPageViews(recentPageViews);
-        localStorage.setItem('pageViews', JSON.stringify(recentPageViews));
+    setStats(data);
+    setApihits(apihitcount);
+    setPageViews(data.pageViews?.slice(-7) || []);
+
+    localStorage.setItem("stats", JSON.stringify(data));
+    localStorage.setItem("apihits", JSON.stringify(apihitcount));
+    localStorage.setItem("pageViews", JSON.stringify(data.pageViews || []));
+
+    setRequestStats(prev => ({ ...prev, success: prev.success + 1 }));
       } catch (error) {
         console.error('Error fetching analytics:', error);
         setLoading(false);
