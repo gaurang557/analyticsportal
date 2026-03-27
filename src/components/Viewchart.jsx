@@ -3,7 +3,6 @@ import React from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const Viewchart = ({pageViews}) => {
-  console.log("Page views in Viewchart:", pageViews);
   return (
     <div className="chart-card">
           <h2 className="chart-title">Weekly Page Views</h2>

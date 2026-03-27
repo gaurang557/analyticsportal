@@ -65,7 +65,7 @@ const PortfolioAnalytics = () => {
         const response = await fetch(`${url}/api/analytics`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             'Authorization': `Bearer ${t}`,
           }
         });
@@ -110,7 +110,6 @@ const PortfolioAnalytics = () => {
 
     if (!response.ok) throw new Error("API failed");
     const data = await response.json();
-    console.log("Fetched data:", data);
     const apihitsData = JSON.parse(data.apihitcount || "[]");
     const apihitcount = apihitsData.map(obj => ({
       date: obj.Item1,
